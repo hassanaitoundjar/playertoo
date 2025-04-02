@@ -1,0 +1,2 @@
+  // Use the useUserChange hook to detect user changes
+  const refreshKey = useUserChange();
