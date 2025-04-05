@@ -100,7 +100,8 @@ export const ContentCarousel: React.FC<ContentCarouselProps> = ({
         {data.map((item, index) => (
           <View key={`${item.type}-${item.id}`} style={styles.itemContainer}>
             <ImageBackground
-              source={{ uri: item.backdrop || item.image }}
+              source={{ uri: (item.backdrop || item.image) || undefined }}
+              defaultSource={require('../../assets/images/placeholder.png')}
               style={styles.backgroundImage}
               resizeMode="cover"
             >

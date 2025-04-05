@@ -172,7 +172,8 @@ export default function SeriesDetailScreen() {
         <View style={styles.episodeImageContainer}>
           {item.info && item.info.movie_image ? (
             <Image
-              source={{ uri: item.info.movie_image }}
+              source={{ uri: item.info.movie_image || undefined }}
+              defaultSource={require('../../assets/images/placeholder.png')}
               style={styles.episodeImage}
               resizeMode="cover"
             />

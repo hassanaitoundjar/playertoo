@@ -120,7 +120,7 @@ export default function SeriesPlayerScreen() {
       ) : streamUrl ? (
         <VideoPlayer
           source={{ 
-            uri: streamUrl,
+            uri: streamUrl || '',
             headers: xtreamApi.getStreamHeaders() 
           }}
           title={title}

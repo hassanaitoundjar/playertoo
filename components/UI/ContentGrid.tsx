@@ -52,7 +52,8 @@ export const ContentGrid: React.FC<ContentGridProps> = ({
       <View style={[styles.imageContainer, { backgroundColor: colors.border }]}>
         {item.image ? (
           <Image
-            source={{ uri: item.image }}
+            source={{ uri: item.image || undefined }}
+            defaultSource={require('../../assets/images/placeholder.png')}
             style={styles.image}
             resizeMode="cover"
           />
@@ -116,7 +117,9 @@ export const ContentGrid: React.FC<ContentGridProps> = ({
         numColumns={numColumns}
         contentContainerStyle={styles.gridContainer}
         ListEmptyComponent={renderEmpty}
-        showsVerticalScrollIndicator={false}
+        showsVerticalScrollIndicator={true}
+        scrollEnabled={true}
+        nestedScrollEnabled={true}
       />
     </View>
   );

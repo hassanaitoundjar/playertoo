@@ -96,7 +96,7 @@ export default function LivePlayerScreen() {
           onError={handleError}
           streamId={stream.stream_id}
           streamType="live"
-          posterSource={stream.stream_icon ? { uri: stream.stream_icon } : undefined}
+          posterSource={stream.stream_icon && stream.stream_icon.trim() !== '' ? { uri: stream.stream_icon } : undefined}
         />
       ) : (
         <View style={styles.centeredContainer}>

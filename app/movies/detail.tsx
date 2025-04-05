@@ -176,7 +176,8 @@ export default function MovieDetailScreen() {
           {/* Movie Poster and Gradient Overlay */}
           <View style={styles.posterContainer}>
             <Image
-              source={{ uri: movie.info.movie_image || movie.movie_data.stream_icon }}
+              source={{ uri: (movie.info.movie_image || movie.movie_data.stream_icon) || undefined }}
+              defaultSource={require('../../assets/images/placeholder.png')}
               style={styles.posterImage}
               resizeMode="cover"
             />

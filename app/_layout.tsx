@@ -52,11 +52,13 @@ function RootLayoutNav() {
       <Stack>
         <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
         <Stack.Screen name="(auth)" options={{ headerShown: false }} />
-        <Stack.Screen name="live" options={{ headerShown: false }} />
-        <Stack.Screen name="movies" options={{ headerShown: false }} />
-        <Stack.Screen name="series" options={{ headerShown: false }} />
+        <Stack.Screen name="live/player" options={{ headerShown: false }} />
+        <Stack.Screen name="movies/category" options={{ headerShown: false }} />
+        <Stack.Screen name="movies/detail" options={{ headerShown: false }} />
+        <Stack.Screen name="series/detail" options={{ headerShown: false }} />
+        <Stack.Screen name="series/player" options={{ headerShown: false }} />
         <Stack.Screen name="search" options={{ headerShown: false }} />
-        <Stack.Screen name="modal" options={{ presentation: 'modal' }} />
+        <Stack.Screen name="_sitemap" options={{ headerShown: false }} />
       </Stack>
     </View>
   );

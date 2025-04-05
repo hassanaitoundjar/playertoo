@@ -139,7 +139,7 @@ export default function HomeScreen() {
     <SafeAreaView style={[styles.container, { backgroundColor: colors.background }]}>
       <StatusBar style={isDark ? 'light' : 'dark'} />
       
-      <ScrollView showsVerticalScrollIndicator={false}>
+      <View style={styles.contentContainer}>
         {featuredItems.length > 0 && (
           <ContentCarousel
             title="Featured Content"
@@ -149,42 +149,48 @@ export default function HomeScreen() {
         )}
         
         {recentlyWatched.length > 0 && (
-          <ContentGrid
-            title="Continue Watching"
-            data={recentlyWatched.map(item => ({
-              id: item.id,
-              title: item.name,
-              image: item.stream_icon || item.cover,
-              type: item.type,
-            }))}
-            onItemPress={handleItemPress}
-            showType
-          />
+          <View style={styles.sectionContainer}>
+            <ContentGrid
+              title="Continue Watching"
+              data={recentlyWatched.map(item => ({
+                id: item.id,
+                title: item.name,
+                image: item.stream_icon || item.cover,
+                type: item.type,
+              }))}
+              onItemPress={handleItemPress}
+              showType
+            />
+          </View>
         )}
         
         {favorites.length > 0 && (
-          <ContentGrid
-            title="My Favorites"
-            data={favorites.map(item => ({
-              id: item.id,
-              title: item.name,
-              image: item.stream_icon || item.cover,
-              type: item.type,
-            }))}
-            onItemPress={handleItemPress}
-            showType
-          />
+          <View style={styles.sectionContainer}>
+            <ContentGrid
+              title="My Favorites"
+              data={favorites.map(item => ({
+                id: item.id,
+                title: item.name,
+                image: item.stream_icon || item.cover,
+                type: item.type,
+              }))}
+              onItemPress={handleItemPress}
+              showType
+            />
+          </View>
         )}
         
         {isLoading && recentlyWatched.length === 0 && featuredItems.length === 0 && (
-          <ContentGrid
-            title="Content"
-            data={[]}
-            onItemPress={() => {}}
-            isLoading={true}
-          />
+          <View style={styles.sectionContainer}>
+            <ContentGrid
+              title="Content"
+              data={[]}
+              onItemPress={() => {}}
+              isLoading={true}
+            />
+          </View>
         )}
-      </ScrollView>
+      </View>
     </SafeAreaView>
   );
 }
@@ -193,4 +199,11 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
+  contentContainer: {
+    flex: 1,
+    paddingBottom: 20,
+  },
+  sectionContainer: {
+    marginBottom: 10,
+  }
 });

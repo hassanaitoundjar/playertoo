@@ -48,7 +48,7 @@ export default function MoviesScreen() {
   useEffect(() => {
     // Filter movies based on selected category and search query
     filterMovies();
-  }, [selectedCategory, movies, searchQuery]);
+  }, [selectedCategory, searchQuery]);
   
   const loadMoviesData = async () => {
     setIsLoading(true);
@@ -126,72 +126,76 @@ export default function MoviesScreen() {
     <SafeAreaView style={[styles.container, { backgroundColor: colors.background }]}>
       <StatusBar style={isDark ? 'light' : 'dark'} />
       
-      <View style={styles.header}>
-        <Text style={[styles.title, { color: colors.text }]}>Movies</Text>
+      <View style={styles.headerContainer}>
+        <View style={styles.header}>
+          <Text style={[styles.title, { color: colors.text }]}>Movies</Text>
+          
+          <View style={[styles.searchContainer, { backgroundColor: colors.card, borderColor: colors.border }]}>
+            <Ionicons name="search" size={20} color={colors.text} style={styles.searchIcon} />
+            <TextInput
+              style={[styles.searchInput, { color: colors.text }]}
+              placeholder="Search movies..."
+              placeholderTextColor={isDark ? '#777' : '#999'}
+              value={searchQuery}
+              onChangeText={setSearchQuery}
+              clearButtonMode="while-editing"
+            />
+            {searchQuery.length > 0 && (
+              <TouchableOpacity onPress={() => setSearchQuery('')} style={styles.clearButton}>
+                <Ionicons name="close-circle" size={18} color={colors.text} />
+              </TouchableOpacity>
+            )}
+          </View>
+        </View>
         
-        <View style={[styles.searchContainer, { backgroundColor: colors.card, borderColor: colors.border }]}>
-          <Ionicons name="search" size={20} color={colors.text} style={styles.searchIcon} />
-          <TextInput
-            style={[styles.searchInput, { color: colors.text }]}
-            placeholder="Search movies..."
-            placeholderTextColor={isDark ? '#777' : '#999'}
-            value={searchQuery}
-            onChangeText={setSearchQuery}
-            clearButtonMode="while-editing"
+        <View style={styles.categoriesContainer}>
+          <ScrollableFlatList
+            data={categories}
+            renderItem={renderCategory}
+            keyExtractor={(item) => item.category_id}
+            horizontal
+            showsHorizontalScrollIndicator={false}
+            contentContainerStyle={styles.categoriesList}
+            ListHeaderComponent={
+              <TouchableOpacity
+                style={[
+                  styles.categoryButton,
+                  selectedCategory === null && { backgroundColor: colors.primary },
+                ]}
+                onPress={() => handleSelectCategory(null)}
+              >
+                <Text
+                  style={[
+                    styles.categoryText,
+                    selectedCategory === null ? { color: 'white' } : { color: colors.text },
+                  ]}
+                >
+                  All
+                </Text>
+              </TouchableOpacity>
+            }
           />
-          {searchQuery.length > 0 && (
-            <TouchableOpacity onPress={() => setSearchQuery('')} style={styles.clearButton}>
-              <Ionicons name="close-circle" size={18} color={colors.text} />
-            </TouchableOpacity>
-          )}
         </View>
       </View>
       
-      <View style={styles.categoriesContainer}>
-        <ScrollableFlatList
-          data={categories}
-          renderItem={renderCategory}
-          keyExtractor={(item) => item.category_id}
-          horizontal
-          showsHorizontalScrollIndicator={false}
-          contentContainerStyle={styles.categoriesList}
-          ListHeaderComponent={
-            <TouchableOpacity
-              style={[
-                styles.categoryButton,
-                selectedCategory === null && { backgroundColor: colors.primary },
-              ]}
-              onPress={() => handleSelectCategory(null)}
-            >
-              <Text
-                style={[
-                  styles.categoryText,
-                  selectedCategory === null ? { color: 'white' } : { color: colors.text },
-                ]}
-              >
-                All
-              </Text>
-            </TouchableOpacity>
-          }
+      <View style={styles.contentContainer}>
+        <ContentGrid
+          title={selectedCategory ? categories.find(c => c.category_id === selectedCategory)?.category_name || 'Movies' : 'All Movies'}
+          data={filteredMovies.map(movie => ({
+            id: movie.stream_id,
+            title: movie.name,
+            image: movie.stream_icon,
+            type: 'vod' as 'vod',
+          }))}
+          onItemPress={(item: ContentItem) => {
+            const movie = movies.find(m => m.stream_id === item.id);
+            if (movie) handleMoviePress(movie);
+          }}
+          isLoading={isLoading}
+          emptyMessage={searchQuery ? "No movies matching your search" : "No movies in this category"}
+          numColumns={3}
         />
       </View>
-      
-      <ContentGrid
-        title={selectedCategory ? categories.find(c => c.category_id === selectedCategory)?.category_name || 'Movies' : 'All Movies'}
-        data={filteredMovies.map(movie => ({
-          id: movie.stream_id,
-          title: movie.name,
-          image: movie.stream_icon,
-          type: 'vod' as 'vod',
-        }))}
-        onItemPress={(item: ContentItem) => {
-          const movie = movies.find(m => m.stream_id === item.id);
-          if (movie) handleMoviePress(movie);
-        }}
-        isLoading={isLoading}
-        emptyMessage={searchQuery ? "No movies matching your search" : "No movies in this category"}
-        numColumns={3}
-      />
     </SafeAreaView>
   );
 }
@@ -208,6 +212,9 @@ const ScrollableFlatList = <T extends any>(props: FlatListProps<T>) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+  },
+  headerContainer: {
+    flexShrink: 0,
   },
   header: {
     paddingHorizontal: 16,
@@ -245,6 +252,9 @@ const styles = StyleSheet.create({
   },
   categoriesList: {
     paddingHorizontal: 16,
+  },
+  contentContainer: {
+    flex: 1,
   },
   categoryButton: {
     paddingHorizontal: 16,
