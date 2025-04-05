@@ -127,18 +127,20 @@ export default function MovieDetailScreen() {
   
   if (isPlaying && movie) {
     return (
-      <VideoPlayer
-        source={{ 
-          uri: getStreamUrl(),
-          headers: xtreamApi.getStreamHeaders()
-        }}
-        title={movie.movie_data.name}
-        onClose={handleClosePlayer}
-        onError={handlePlayerError}
-        streamId={movie.movie_data.stream_id}
-        streamType="vod"
-        posterSource={movie.info.movie_image ? { uri: movie.info.movie_image } : undefined}
-      />
+      <View style={{backgroundColor: '#000', flex: 1}}>
+        <VideoPlayer
+          source={{ 
+            uri: getStreamUrl(),
+            headers: xtreamApi.getStreamHeaders()
+          }}
+          title={movie.movie_data.name}
+          onClose={handleClosePlayer}
+          onError={handlePlayerError}
+          streamId={movie.movie_data.stream_id}
+          streamType="vod"
+          posterSource={movie.info.movie_image ? { uri: movie.info.movie_image } : undefined}
+        />
+      </View>
     );
   }
   

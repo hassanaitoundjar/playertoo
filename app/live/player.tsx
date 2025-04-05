@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { View, StyleSheet, Text } from 'react-native';
+import { View, StyleSheet, Text, ActivityIndicator } from 'react-native';
 import { Stack, useLocalSearchParams, useRouter } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import { xtreamApi } from '../../services/api';
 import { VideoPlayer } from '../../components/Player/VideoPlayer';
 import { useTheme } from '../../context/ThemeContext';
 import { LiveStream } from '../../types';
+import { black, white } from 'react-native-paper/lib/typescript/styles/themes/v2/colors';
 
 export default function LivePlayerScreen() {
   const { colors, isDark } = useTheme();
@@ -56,7 +57,7 @@ export default function LivePlayerScreen() {
   const handleError = (errorMessage: string) => {
     setError(`Playback error: ${errorMessage}`);
   };
-  
+
   // Get stream URL
   const getStreamUrl = () => {
     if (!stream) return null;
@@ -64,8 +65,9 @@ export default function LivePlayerScreen() {
   };
   
   return (
-    <View style={[styles.container, { backgroundColor: colors.background }]}>
+    <View style={[styles.container]}>
       <StatusBar style="light" />
+
       
       <Stack.Screen
         options={{
@@ -77,13 +79,14 @@ export default function LivePlayerScreen() {
       
       {loading ? (
         <View style={styles.centeredContainer}>
-          <Text style={[styles.loadingText, { color: colors.text }]}>
-            Loading stream...
+          <ActivityIndicator size="large" color="#fff" />
+          <Text style={styles.loadingText}>
+            Loading Stream...
           </Text>
         </View>
       ) : error ? (
         <View style={styles.centeredContainer}>
-          <Text style={[styles.errorText, { color: colors.error }]}>{error}</Text>
+          <Text style={styles.errorText}>{error}</Text>
         </View>
       ) : stream ? (
         <VideoPlayer
@@ -100,7 +103,7 @@ export default function LivePlayerScreen() {
         />
       ) : (
         <View style={styles.centeredContainer}>
-          <Text style={[styles.errorText, { color: colors.error }]}>
+          <Text style={styles.errorText}>
             Stream not available
           </Text>
         </View>
@@ -112,18 +115,23 @@ export default function LivePlayerScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: '#000',
   },
   centeredContainer: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
     padding: 20,
+    backgroundColor: '#000',
   },
   loadingText: {
     fontSize: 16,
+    color: '#fff',
+    marginTop: 15,
   },
   errorText: {
     fontSize: 16,
     textAlign: 'center',
+    color: '#ff5252',
   },
 }); 

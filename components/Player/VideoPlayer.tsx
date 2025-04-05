@@ -54,7 +54,6 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({
   const [status, setStatus] = useState<AVPlaybackStatus | null>(null);
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [controlsVisible, setControlsVisible] = useState(true);
-  const [isBuffering, setIsBuffering] = useState(true);
   const [isInRetryFlow, setIsInRetryFlow] = useState(false);
   const [currentFormat, setCurrentFormat] = useState<'m3u8' | 'mp4' | 'ts'>('m3u8');
   const [playbackAttempt, setPlaybackAttempt] = useState(0);
@@ -80,7 +79,6 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({
     if (isInRetryFlow) return; // Prevent multiple retries at once
     
     setIsInRetryFlow(true);
-    setIsBuffering(true);
     
     const formats: ('m3u8' | 'mp4' | 'ts')[] = ['m3u8', 'mp4', 'ts'];
     const currentIndex = formats.indexOf(currentFormat);
@@ -164,11 +162,11 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({
   useEffect(() => {
     // Set a timeout for loading to trigger retry
     loadTimeoutRef.current = setTimeout(() => {
-      if (isBuffering && playbackAttempt === 0) {
+      if (playbackAttempt === 0) {
         console.log('Loading timeout - attempting format switch');
         retryWithDifferentFormat();
       }
-    }, 15000); // 15 seconds timeout
+    }, 8000); // Reduced from 15000 (15 seconds) to 8000 (8 seconds) for faster format switching
     
     return () => {
       if (loadTimeoutRef.current) {
@@ -189,9 +187,6 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({
     setStatus(playbackStatus);
     
     if (playbackStatus.isLoaded) {
-      // Update buffering state
-      setIsBuffering(playbackStatus.isBuffering);
-      
       // Clear loading timeout when playback starts
       if (loadTimeoutRef.current) {
         clearTimeout(loadTimeoutRef.current);
@@ -340,7 +335,7 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({
   };
   
   return (
-    <View style={[styles.container, { backgroundColor: colors.background }]}>
+    <View style={styles.container}>
       <TouchableOpacity 
         activeOpacity={1} 
         style={[styles.videoContainer, { width: videoWidth, height: videoHeight }]}
@@ -359,16 +354,6 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({
           onPlaybackStatusUpdate={onPlaybackStatusUpdate}
           onError={handleError}
         />
-        
-        {/* Loading indicator */}
-        {/* {isBuffering && (
-          <View style={styles.bufferingContainer}>
-            <ActivityIndicator size="large" color={colors.primary} />
-            <Text style={[styles.bufferingText, { color: colors.text }]}>
-              {isInRetryFlow ? `Trying different format (${currentFormat})...` : 'Loading...'}
-            </Text>
-          </View>
-        )} */}
         
         {/* Player controls - only visible when controlsVisible is true */}
         {controlsVisible && (
@@ -436,6 +421,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
+    backgroundColor: '#000',
   },
   videoContainer: {
     position: 'relative',
@@ -495,15 +481,5 @@ const styles = StyleSheet.create({
   },
   fullscreenButton: {
     padding: 8,
-  },
-  bufferingContainer: {
-    ...StyleSheet.absoluteFillObject,
-    backgroundColor: 'rgba(0, 0, 0, 0.7)',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  bufferingText: {
-    color: 'white',
-    marginTop: 10,
   },
 }); 

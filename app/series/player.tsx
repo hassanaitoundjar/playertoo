@@ -95,7 +95,7 @@ export default function SeriesPlayerScreen() {
   }, [streamUrl, loading, error]);
   
   return (
-    <View style={[styles.container, { backgroundColor: colors.background }]}>
+    <View style={[styles.container]}>
       <StatusBar style="light" />
       
       <Stack.Screen
@@ -108,14 +108,14 @@ export default function SeriesPlayerScreen() {
       
       {loading ? (
         <View style={styles.centeredContainer}>
-          <ActivityIndicator size="large" color={colors.primary} />
-          <Text style={[styles.loadingText, { color: colors.text }]}>
+          <ActivityIndicator size="large" color="#fff" />
+          <Text style={styles.loadingText}>
             Loading episode...
           </Text>
         </View>
       ) : error ? (
         <View style={styles.centeredContainer}>
-          <Text style={[styles.errorText, { color: colors.error }]}>{error}</Text>
+          <Text style={styles.errorText}>{error}</Text>
         </View>
       ) : streamUrl ? (
         <VideoPlayer
@@ -137,7 +137,7 @@ export default function SeriesPlayerScreen() {
         />
       ) : (
         <View style={styles.centeredContainer}>
-          <Text style={[styles.errorText, { color: colors.error }]}>
+          <Text style={styles.errorText}>
             Episode not available
           </Text>
         </View>
@@ -149,19 +149,23 @@ export default function SeriesPlayerScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: '#000',
   },
   centeredContainer: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
     padding: 20,
+    backgroundColor: '#000',
   },
   loadingText: {
     fontSize: 16,
-    marginTop: 12,
+    marginTop: 15,
+    color: '#fff',
   },
   errorText: {
     fontSize: 16,
     textAlign: 'center',
+    color: '#ff5252',
   },
 }); 

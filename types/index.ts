@@ -56,6 +56,7 @@ export interface VodStream {
   container_extension: string;
   custom_sid: string;
   direct_source: string;
+  plot?: string;
 }
 
 export interface VodInfo {
